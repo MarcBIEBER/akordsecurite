@@ -25,7 +25,7 @@ router.post("/api/v1/login", async (req, res) => {
             };
             await updateUser(req.body.email, updateExpression, expressionAttributeValues);
 
-            // res.cookie('accessTokens', user.accessTokens, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+            res.cookie('accessTokens', user.accessTokens, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
             return res.status(200).send(user);
         } else {
             return res.status(400).send('Email or password is wrong');
@@ -93,6 +93,10 @@ router.post("/api/v1/registerUser", verifyAccessToken, getIsAdmin, async (req, r
       const data = addItemAtTable(user, "userTable");
     //   res.cookie('accessTokens', user.accessTokens, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
       res.status(200).send(user);
+});
+
+router.post('/api/v1/isLogedIn', verifyAccessToken, async (req, res) => {
+    return res.status(200)
 });
 
 router.use((req, res) => {

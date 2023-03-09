@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import './home.css';
+import checkLoginStatus from '../Auth/auth';
 
-import Card from '../UI/Card/Card';
-import classes from './Home.module.css';
-
-const Home = (props) => {
-  return (
-    <Card className={classes.home}>
-      <h1>Welcome back!</h1>
-    </Card>
-  );
-};
+function Home() {
+    checkLoginStatus();
+    return (
+        <div className="home">
+            <h1>Home</h1>
+        </div>
+    );
+}
 
 export default Home;

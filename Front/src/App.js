@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
-import { Route, Routes } from "react-router-dom"
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Routes,
+	Redirect,
+	Navigate
+} from "react-router-dom";
 
-import Login from './components/Login/Login';
-import Home from './components/Home/Home';
+import Home from './components/Home/home';
+import Login from './components/Login/login';
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/login" element={<Login/>}/>
-    </Routes>
-  );
+	return (
+		<Routes>
+			<Route path="/" element={<Home/>} />
+			<Route path="/login" element={<Login/>} />
+		</Routes>
+	);
 }
 
 export default App;
