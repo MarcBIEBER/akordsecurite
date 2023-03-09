@@ -33,25 +33,17 @@ const client = new DynamoDBClient({
 const ddbDocClient = DynamoDBDocumentClient.from(client, translateConfig);
 
 // get user from userTable by email
-const getSuperUser = async (userEmail) => {
-    const params = {
-        TableName: "userTable",
-        Key: {
-            email: userEmail,
-        },
-    };
-
-    try {
-        const data = await ddbDocClient.send(new GetCommand(params));
-        console.log(data);
-        return data.Item;
-    } catch (err) {
-        console.log("Error", err.stack);
+const getSuperUser = async (req, res, next) => {
+    if(req.user_decrypted.userType === "0") {
+        next();
+    } else {    
+        res.status(403).send("Forbidden");
     }
 }
 
 // get user from userTable by email
 const getUser = async (userEmail) => {
+    console.log(userEmail);
     const params = {
         TableName: "userTable",
         Key: {
@@ -61,11 +53,11 @@ const getUser = async (userEmail) => {
 
     try {
         const data = await ddbDocClient.send(new GetCommand(params));
-        // console.log(data.Item);
-        // console.log("Success - item added or updated", data);
+        console.log(data.Item);
         return data.Item;
     } catch (err) {
-        console.log("Error", err.stack);
+        console.log("Error get User", err.stack);
+        return undefined;
     }
 }
 
@@ -87,8 +79,25 @@ const deleteUser = async (userEmail) => {
     }
 };
 
+// addItem in userTable
+const addItemAtTable = async (item, table) => {
+
+    const params = {
+        TableName: table,
+        Item: item
+    };
+
+    try {
+        const data = await ddbDocClient.send(new PutCommand(params));
+        return data;
+    } catch (err) {
+        console.log("Error", err.stack);
+    }
+};
+
 module.exports = {
     getUser,
     getSuperUser,
-    deleteUser
+    deleteUser,
+    addItemAtTable
 };
