@@ -3,7 +3,7 @@ const router = express.Router();
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { verifyAccessToken } = require("./auth");
+const { verifyAccessToken, UserType } = require("./auth");
 const { getSuperUser, addItemAtTable, getUser, getIsAdmin, updateUser } = require("./userDataBase");
 
 const cors = require('cors');
@@ -34,11 +34,14 @@ router.post("/api/v1/login", async (req, res) => {
 });
 
 router.post("/api/v1/createSuperuser", async (req, res) => {
+    if (req.body.secretKey !== process.env.SECRET_KEY) {
+        return res.status(403).send("Forbidden");
+    }
     const user = {
         id: uuid.v4(),
         email: req.body.email,
         password: null,
-        userType: "0",
+        userType: UserType.SUPER_ADMIN,
         ERP: uuid.v4(),
         creationDate: new Date().toISOString(),
         accessTokens: null,

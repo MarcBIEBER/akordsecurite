@@ -5,6 +5,7 @@ const region = process.env.AWS_BUCKET_REGION
 const accessKeyId = process.env.DB_ACCESS_KEY
 const secretAccessKey = process.env.DB_SECRET_KEY
 const jwt = require('jsonwebtoken');
+const { UserType } = require("./auth");
 
 const marshallOptions = {
     // Whether to automatically convert empty strings, blobs, and sets to `null`.    
@@ -34,7 +35,7 @@ const ddbDocClient = DynamoDBDocumentClient.from(client, translateConfig);
 
 // get user from userTable by email
 const getSuperUser = async (req, res, next) => {
-    if(req.user_decrypted.userType === "0") {
+    if(req.user_decrypted.userType === UserType.SUPER_ADMIN) {
         next();
     } else {    
         res.status(403).send("Forbidden");
@@ -43,7 +44,7 @@ const getSuperUser = async (req, res, next) => {
 
 // get user from userTable by email
 const getIsAdmin = async (req, res, next) => {
-    if(req.user_decrypted.userType === "1") {
+    if(req.user_decrypted.userType === UserType.ADMIN) {
         next();
     } else {    
         res.status(403).send("Forbidden");
