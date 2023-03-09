@@ -42,24 +42,52 @@ const getSuperUser = async (req, res, next) => {
 }
 
 // get user from userTable by email
+const getIsAdmin = async (req, res, next) => {
+    if(req.user_decrypted.userType === "1") {
+        next();
+    } else {    
+        res.status(403).send("Forbidden");
+    }
+}
+
+// get user from userTable by email
 const getUser = async (userEmail) => {
     console.log(userEmail);
     const params = {
         TableName: "userTable",
         Key: {
-            email: userEmail,
+            email: userEmail
         },
     };
 
     try {
         const data = await ddbDocClient.send(new GetCommand(params));
-        console.log(data.Item);
         return data.Item;
     } catch (err) {
-        console.log("Error get User", err.stack);
+        console.log("Error: getUser:\n", err.stack);
         return undefined;
     }
 }
+
+// updateUser in userTable
+const updateUser = async (userEmail, updateExpression, expressionAttributeValues) => {
+    const params = {
+        TableName: "userTable",
+        Key: {
+            email: userEmail,
+        },
+        UpdateExpression: updateExpression,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ReturnValues: "ALL_NEW",
+    };
+
+    try {
+        const data = await ddbDocClient.send(new UpdateCommand(params));
+        return data;
+    } catch (err) {
+        console.error("Error", err.stack);
+    }
+};
 
 // deleteUser in userTable by email
 const deleteUser = async (userEmail) => {
@@ -98,6 +126,8 @@ const addItemAtTable = async (item, table) => {
 module.exports = {
     getUser,
     getSuperUser,
+    getIsAdmin,
+    updateUser,
     deleteUser,
     addItemAtTable
 };
