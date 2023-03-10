@@ -20,12 +20,19 @@ function Login() {
     }
 
     return (
-        <div className="login">
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-                <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-                <button type="submit">Login</button>
-            </form>
+        <div className="login-page">
+            <div className="avatar">
+                <img src="https://lh3.googleusercontent.com/FwKlxFr19NHYbgv1rK_GcC9BfPYwS7EyYIyIEEcBXJtUQU9mVUnIFMV2Tsg5DRP4ldBqKOQ=s85" alt="logo" />
+            </div>
+            <div className="login">
+                <h2>Me connecter</h2>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" placeholder="Email" value={username} onChange={e => setUsername(e.target.value)} />
+                    <input type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)} />
+                    <button type="submit">Login</button>
+                </form>
+                <p className="forgot-password"><a href="#">Mot de passe oublié ?</a></p>
+            </div>
         </div>
     );
 }

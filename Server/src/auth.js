@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 
 // verify user token:
 function verifyAccessToken (req, res, next) {
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.body.authorization;
     jwt.verify(authHeader, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) return res.status(403).send(err);
         req.user_decrypted = user;
         next();
     });

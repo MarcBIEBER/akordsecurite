@@ -16,10 +16,10 @@ function getCookie(cookie_name) {
 }
 
 function checkLoginStatus() {
-	const headers = {
+	const data = {
 		authorization: getCookie("accessTokens")
 	};
-	axios.post("http://localhost:8080/user/api/v1/isLogedIn", headers)
+	axios.post("http://localhost:8080/user/api/v1/isLogedIn", data)
 		.then(response => {
 			console.log("user is loged in")
 		})
